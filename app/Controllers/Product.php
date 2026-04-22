@@ -25,6 +25,7 @@ class Product extends BaseController
     public function index()
 {
     $categorySlug = $this->request->getVar('kategori');
+    $keyword      = $this->request->getVar('q');
     
     // PASTIKAN BARIS INI ADA: Untuk mengambil semua kategori dari database
     $data['categories'] = $this->categoryModel->findAll();
@@ -32,17 +33,18 @@ class Product extends BaseController
     if ($categorySlug) {
         $category = $this->categoryModel->where('slug', $categorySlug)->first();
         if ($category) {
-            $data['products'] = $this->productModel->getProductsWithCategory($category['id']);
+            $data['products'] = $this->productModel->getProductsWithCategory($category['id'], $keyword);
         } else {
             $data['products'] = [];
         }
     } else {
-        $data['products'] = $this->productModel->getProductsWithCategory();
+        $data['products'] = $this->productModel->getProductsWithCategory(null, $keyword);
     }
 
     $data['title']       = 'Katalog Alat Kesehatan - Fulki Hasya';
     $data['settings']    = $this->getSettings();
     $data['current_cat'] = $categorySlug;
+    $data['keyword']     = $keyword;
 
     return view('frontend/product/index', $data);
 }
