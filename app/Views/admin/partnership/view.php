@@ -58,7 +58,7 @@
                 <hr class="my-4 opacity-10">
 
                 <div class="d-grid gap-2">
-                    <a href="mailto:<?= esc($partnership['email']) ?>" class="btn btn-primary py-2 fw-bold rounded-3">
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?= esc($partnership['email']) ?>" target="_blank" class="btn btn-primary py-2 fw-bold rounded-3">
                         <i class="fas fa-reply me-2"></i> Balas via Email
                     </a>
                     <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $partnership['phone']) ?>" target="_blank" class="btn btn-success py-2 fw-bold rounded-3">
