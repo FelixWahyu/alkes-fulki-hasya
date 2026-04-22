@@ -132,6 +132,90 @@
 </section>
 
 <!-- ============================================================
+     PARTNERSHIP FORM
+     ============================================================ -->
+<section class="section-fh bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card-fh p-0 overflow-hidden reveal">
+                    <div class="row g-0">
+                        <div class="col-lg-5 p-4 p-md-5 bg-primary text-white d-flex flex-column justify-content-center">
+                            <span class="badge bg-white bg-opacity-20 text-white mb-3 align-self-start py-2 px-3">
+                                <i class="fas fa-handshake me-1"></i> Jalin Kerjasama
+                            </span>
+                            <h2 class="fw-bold mb-4" style="font-size: 2rem;">Tertarik Menjadi Mitra Kami?</h2>
+                            <p class="mb-4 opacity-75">Kami selalu terbuka untuk peluang kerjasama baru yang saling menguntungkan. Silakan isi data perusahaan Anda.</p>
+                            
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div class="bg-white bg-opacity-10 p-3 rounded-3">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Proses Cepat</h6>
+                                    <small class="opacity-75">Tim kami akan merespons dalam 24 jam.</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-white bg-opacity-10 p-3 rounded-3">
+                                    <i class="fas fa-shield-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Data Terjamin</h6>
+                                    <small class="opacity-75">Kerahasiaan data perusahaan Anda adalah prioritas kami.</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-7 p-4 p-md-5 bg-white">
+                            <?php if(session()->getFlashdata('success_partnership')): ?>
+                                <div class="alert alert-success border-0 rounded-4 p-4 mb-4" style="background:#dcfce7; color:#15803d;">
+                                    <div class="d-flex gap-3">
+                                        <i class="fas fa-check-circle fs-4 mt-1"></i>
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Pengajuan Berhasil Terkirim!</h6>
+                                            <p class="small mb-0">Terima kasih atas minat Anda untuk bekerjasama. Tim kami akan segera menghubungi Anda melalui email atau nomor telepon yang diberikan.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                            <form action="<?= base_url('partnership/submit') ?>" method="POST" id="partnershipForm">
+                                <?= csrf_field() ?>
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold small text-muted text-uppercase">Nama Mitra / Perusahaan</label>
+                                        <input type="text" name="company_name" class="form-control bg-light border-0 py-3 px-4" placeholder="Contoh: PT. Sehat Sentosa" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-muted text-uppercase">Email Bisnis</label>
+                                        <input type="email" name="email" class="form-control bg-light border-0 py-3 px-4" placeholder="email@perusahaan.com" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-muted text-uppercase">Nomor Telepon / WA</label>
+                                        <input type="tel" name="phone" class="form-control bg-light border-0 py-3 px-4" placeholder="0812xxxxxx" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold small text-muted text-uppercase">Pesan Kerjasama</label>
+                                        <textarea name="message" class="form-control bg-light border-0 py-3 px-4" rows="4" placeholder="Jelaskan secara singkat rencana atau bentuk kerjasama yang Anda tawarkan..." required></textarea>
+                                    </div>
+                                    <div class="col-md-12 pt-2">
+                                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow-primary">
+                                            Kirim Penawaran Kerjasama <i class="fas fa-paper-plane ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
      CTA BANNER
      ============================================================ -->
 <section class="section-fh-sm reveal" style="padding-top:0;">

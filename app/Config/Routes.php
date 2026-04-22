@@ -14,6 +14,7 @@ $routes->get('kontak', 'Home::contact');
 
 // Form WA & Leads Logic
 $routes->post('checkout/process', 'Product::processCheckout');
+$routes->post('partnership/submit', 'Home::submitPartnership');
 
 // Admin Panel Routes (Protected by Auth Filter nantinya)
 $routes->group('admin', function($routes) {
@@ -40,4 +41,8 @@ $routes->group('admin', function($routes) {
 
     $routes->post('products/store', 'Admin\Product::store');
 
+    // Partnerships
+    $routes->get('partnerships', 'Admin\Partnership::index');
+    $routes->get('partnerships/(:num)', 'Admin\Partnership::view/$1');
+    $routes->post('partnerships/delete/(:num)', 'Admin\Partnership::delete/$1');
 });
