@@ -409,11 +409,24 @@
 /* ---- Product Cards ---- */
 .product-card { display: flex; flex-direction: column; }
 .product-img-link { display: block; text-decoration: none; }
-.product-img-wrap { position: relative; overflow: hidden; }
-.product-img {
+.product-img-wrap {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     height: 240px;
-    object-fit: cover;
+    padding: 15px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.product-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
     display: block;
     transition: transform 0.5s ease;
 }
