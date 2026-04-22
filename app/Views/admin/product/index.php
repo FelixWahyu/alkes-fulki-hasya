@@ -57,8 +57,15 @@
                             <td class="text-center ps-4 fw-medium text-muted"><?= $no++ ?></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-light rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                                        <i class="fas fa-image text-muted opacity-50"></i>
+                                    <div class="bg-light rounded me-3 overflow-hidden d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                        <?php 
+                                            $img = !empty($row['main_image']) ? $row['main_image'] : 'default.jpg';
+                                        ?>
+                                        <img src="<?= base_url('uploads/products/' . $img) ?>" 
+                                             alt="Product" 
+                                             class="w-100 h-100" 
+                                             style="object-fit: cover;"
+                                             onerror="this.src='<?= base_url('uploads/products/default.jpg') ?>'">
                                     </div>
                                     <div>
                                         <span class="fw-bold text-dark d-block"><?= esc($row['name']) ?></span>
@@ -95,10 +102,10 @@
                                         </li>
                                         <li><hr class="dropdown-divider opacity-10"></li>
                                         <li>
-                                            <form action="<?= base_url('admin/products/' . $row['id']) ?>" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus produk ini?');">
+                                            <form action="<?= base_url('admin/products/' . $row['id']) ?>" method="POST" class="d-inline delete-form">
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="dropdown-item py-2 text-danger">
+                                                <button type="button" class="dropdown-item py-2 text-danger btn-delete">
                                                     <i class="fas fa-trash-alt me-2"></i> Hapus Produk
                                                 </button>
                                             </form>
@@ -114,5 +121,33 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Product Delete Confirmation
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const form = this.closest('.delete-form');
+            const productName = form.closest('tr').querySelector('.fw-bold.text-dark').textContent;
+            
+            Swal.fire({
+                title: 'Hapus Produk?',
+                text: `Anda akan menghapus "${productName}". Tindakan ini tidak dapat dibatalkan!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
+</script>
 
 <?= $this->endSection() ?>

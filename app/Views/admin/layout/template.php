@@ -13,6 +13,7 @@
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="<?= base_url('css/admin-custom.css') ?>">
     
 </head>
@@ -36,6 +37,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Sidebar Toggler for Mobile
         const sidebar = document.getElementById('sidebar');
@@ -51,12 +53,38 @@
         // Close sidebar when clicking outside on mobile
         document.addEventListener('click', function(event) {
             const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
             const isClickInsideSidebar = sidebar.contains(event.target);
             const isClickOnToggle = event.target.closest('.sidebar-toggle');
             
             if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('show')) {
                 sidebar.classList.remove('show');
             }
+        });
+
+        // Global Logout Confirmation
+        document.querySelectorAll('.logout-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('href');
+                
+                Swal.fire({
+                    title: 'Keluar dari Sistem?',
+                    text: "Sesi Anda akan berakhir dan Anda harus login kembali.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#1e40af',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Keluar',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    borderRadius: '15px'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
         });
     </script>
 </body>

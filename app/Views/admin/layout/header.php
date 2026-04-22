@@ -30,7 +30,7 @@
                     </li>
                     <li><hr class="dropdown-divider opacity-10"></li>
                     <li>
-                        <a class="dropdown-item py-2 px-3 text-danger" href="<?= base_url('admin/logout') ?>">
+                        <a class="dropdown-item py-2 px-3 text-danger logout-btn" href="<?= base_url('admin/logout') ?>">
                             <i class="fas fa-sign-out-alt me-2"></i> Logout dari Sistem
                         </a>
                     </li>
