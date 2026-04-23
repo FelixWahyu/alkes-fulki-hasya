@@ -20,7 +20,7 @@ class Home extends BaseController
         }
 
         $data = [
-            'title'    => 'Fulki Hasya - Solusi Alat Kesehatan Terpercaya',
+            'title'    => ($settings['business_name'] ?? 'Fulki Hasya') . ' - Solusi Alat Kesehatan Terpercaya',
             'settings' => $settings,
             // Ambil 6 produk terbaru untuk ditampilkan di Home
             'featured_products' => $productModel->getProductsWithCategory()
@@ -33,19 +33,20 @@ class Home extends BaseController
 
 public function about()
 {
-    $settingModel = new SettingModel();
+    $settings = $this->getSettings();
     $data = [
-        'title'    => 'Tentang Kami - Fulki Hasya',
-        'settings' => $this->getSettings() // Pastikan fungsi getSettings() sudah ada di bawah
+        'title'    => 'Tentang Kami - ' . ($settings['business_name'] ?? 'Fulki Hasya'),
+        'settings' => $settings
     ];
     return view('frontend/pages/about', $data);
 }
 
 public function contact()
 {
+    $settings = $this->getSettings();
     $data = [
-        'title'    => 'Kontak Kami - Fulki Hasya',
-        'settings' => $this->getSettings()
+        'title'    => 'Kontak Kami - ' . ($settings['business_name'] ?? 'Fulki Hasya'),
+        'settings' => $settings
     ];
     return view('frontend/pages/contact', $data);
 }

@@ -36,6 +36,7 @@ $routes->group('admin', function($routes) {
     $routes->get('settings', 'Admin\Settings::index');
     $routes->post('settings/update-text', 'Admin\Settings::updateText');
     $routes->post('settings/update-video', 'Admin\Settings::updateHeroVideo'); // Rute untuk upload video
+    $routes->post('settings/update-logo', 'Admin\Settings::updateLogo'); // Rute untuk upload logo
     $routes->get('change-password', 'Admin\Auth::changePassword');
     $routes->post('update-password', 'Admin\Auth::updatePassword');
 

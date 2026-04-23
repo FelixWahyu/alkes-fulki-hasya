@@ -1,7 +1,26 @@
+<?php
+$db = \Config\Database::connect();
+$settingsRaw = $db->table('settings')->get()->getResultArray();
+$sidebarSettings = [];
+foreach ($settingsRaw as $row) {
+    $sidebarSettings[$row['key']] = $row['value'];
+}
+$businessName = $sidebarSettings['business_name'] ?? 'Fulki Hasya';
+$webLogo = $sidebarSettings['web_logo'] ?? '';
+?>
 <nav id="sidebar">
     <div class="sidebar-brand">
-        <i class="fas fa-heartbeat me-3"></i>
-        <span>Fulki Hasya</span>
+        <div class="d-flex flex-column justify-content-center align-items-center text-center px-3">
+            <?php if (!empty($webLogo)): ?>
+                <img src="<?= base_url('uploads/media/' . $webLogo) ?>" alt="<?= $businessName ?>"
+                    style="height: 50px; margin-bottom: 10px;">
+            <?php else: ?>
+                <i class="fas fa-heartbeat mb-2" style="font-size: 1.5rem;"></i>
+            <?php endif; ?>
+            <div class="fw-bold small" style="line-height: 1.2;">Admin
+                <?= $businessName ?>
+            </div>
+        </div>
     </div>
 
     <div class="nav flex-column mt-3">
@@ -27,13 +46,14 @@
             <span>Katalog Produk</span>
         </a>
 
-        <?php 
-            $newPartnerships = (new \App\Models\PartnershipModel())->where('status', 'new')->countAllResults();
+        <?php
+        $newPartnerships = (new \App\Models\PartnershipModel())->where('status', 'new')->countAllResults();
         ?>
-        <a href="<?= base_url('admin/partnerships') ?>" class="nav-link <?= (url_is('admin/partnerships*')) ? 'active' : '' ?>">
+        <a href="<?= base_url('admin/partnerships') ?>"
+            class="nav-link <?= (url_is('admin/partnerships*')) ? 'active' : '' ?>">
             <i class="fas fa-handshake"></i>
             <span>Pengajuan Mitra</span>
-            <?php if($newPartnerships > 0): ?>
+            <?php if ($newPartnerships > 0): ?>
                 <span class="badge bg-danger rounded-pill ms-auto" style="font-size: 0.6rem;"><?= $newPartnerships ?></span>
             <?php endif; ?>
         </a>

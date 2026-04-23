@@ -101,4 +101,46 @@ class Settings extends BaseController
 
     return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses video.');
 }
+
+    // 4. Mengunggah dan Mengganti Logo Website
+    public function updateLogo()
+    {
+        $file = $this->request->getFile('web_logo');
+
+        if ($file === null || !$file->isValid()) {
+            return redirect()->back()->with('error', 'Gagal mengunggah logo. Pastikan file dipilih.');
+        }
+
+        // Cek Ukuran File (Maks 2MB untuk logo)
+        $maxSize = 2 * 1024 * 1024; 
+        if ($file->getSize() > $maxSize) {
+            return redirect()->back()->with('error', 'Ukuran logo terlalu besar! Maksimal 2MB.');
+        }
+
+        // Cek Format File (PNG, JPG, JPEG, SVG, WEBP)
+        $allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/webp'];
+        if (!in_array($file->getMimeType(), $allowedTypes)) {
+            return redirect()->back()->with('error', 'Format file harus PNG, JPG, JPEG, WEBP, atau SVG.');
+        }
+
+        if (!$file->hasMoved()) {
+            $newName = $file->getRandomName();
+            $file->move(FCPATH . 'uploads/media', $newName);
+            
+            $exist = $this->settingModel->where('key', 'web_logo')->first();
+            
+            if ($exist) {
+                if (file_exists(FCPATH . 'uploads/media/' . $exist['value']) && $exist['value'] != '') {
+                    unlink(FCPATH . 'uploads/media/' . $exist['value']);
+                }
+                $this->settingModel->update($exist['id'], ['value' => $newName]);
+            } else {
+                $this->settingModel->insert(['key' => 'web_logo', 'value' => $newName]);
+            }
+            
+            return redirect()->to(base_url('admin/settings'))->with('success', 'Logo Website berhasil diperbarui.');
+        }
+
+        return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses logo.');
+    }
 }
