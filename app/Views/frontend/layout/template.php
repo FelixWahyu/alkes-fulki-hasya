@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="<?= !empty($settings['web_logo']) ? base_url('uploads/media/' . $settings['web_logo']) : base_url('favicon.ico') ?>">
+
     <!-- SEO Meta Tags -->
     <title><?= $title ?? 'Toko Alat Kesehatan Fulki Hasya' ?></title>
     <meta name="description"
@@ -24,11 +27,13 @@
     <meta property="og:url" content="<?= current_url() ?>">
     <meta property="og:site_name" content="Fulki Hasya">
     <meta property="og:locale" content="id_ID">
+    <meta property="og:image" content="<?= !empty($settings['web_logo']) ? base_url('uploads/media/' . $settings['web_logo']) : base_url('favicon.ico') ?>">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= $title ?? 'Toko Alat Kesehatan Fulki Hasya' ?>">
     <meta name="twitter:description" content="<?= $meta_desc ?? 'Penyedia peralatan medis berkualitas.' ?>">
+    <meta name="twitter:image" content="<?= !empty($settings['web_logo']) ? base_url('uploads/media/' . $settings['web_logo']) : base_url('favicon.ico') ?>">
 
     <!-- JSON-LD Organization Schema -->
     <script type="application/ld+json">
