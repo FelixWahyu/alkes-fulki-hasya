@@ -116,7 +116,7 @@
                                 $item = (array) $p;
                                 $p_img = $item['main_image'] ?? 'default.jpg';
                                 ?>
-                                <div class="col-sm-6 col-xl-4 reveal">
+                                <div class="col-sm-6 col-lg-4 col-xl-3 reveal">
                                     <article class="product-card">
                                         <a href="<?= base_url('produk/' . ($item['slug'] ?? '')) ?>" class="product-img-link">
                                             <div class="product-img-wrap">

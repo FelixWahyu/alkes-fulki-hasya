@@ -98,10 +98,9 @@
                                         <img src="<?= base_url('uploads/products/' . $img['image']) ?>" alt="Foto" class="img-fluid w-100 object-fit-cover" style="height: 120px;">
                                         
                                         <a href="<?= base_url('admin/products/delete-image/' . $img['id']) ?>" 
-   class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
-   onclick="return confirm('Hapus foto ini?')">
-   <i class="fas fa-trash"></i>
-</a>
+                                           class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 btn-delete-image">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -114,3 +113,31 @@
 </div>
 
 <?= $this->endSection() ?>
+
+<?= $this->section('extra-js') ?>
+<script>
+    document.querySelectorAll('.btn-delete-image').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = this.getAttribute('href');
+            
+            Swal.fire({
+                title: 'Hapus Foto?',
+                text: "Foto akan dihapus permanen dari server.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                borderRadius: '15px'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
+    });
+</script>
+<?= $this->endSection() ?>

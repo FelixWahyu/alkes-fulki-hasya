@@ -46,9 +46,11 @@ class Product extends BaseController
     $file = $this->request->getFile('main_image');
     $fileName = 'default.jpg';
 
-    if ($file && $file->isValid() && !$file->hasMoved()) {
-        $fileName = $file->getRandomName();
-        $file->move(FCPATH . 'uploads/products/', $fileName);
+    if ($file && $file->isValid()) {
+        $newName = compress_to_webp($file, FCPATH . 'uploads/products/');
+        if ($newName) {
+            $fileName = $newName;
+        }
     }
 
     $this->productModel->save([
@@ -69,16 +71,17 @@ class Product extends BaseController
         // Cek apakah ada file yang diunggah di array product_images
         if (isset($imagefiles['product_images'])) {
             foreach ($imagefiles['product_images'] as $img) {
-                // Pastikan file valid dan belum dipindahkan
-                if ($img->isValid() && ! $img->hasMoved()) {
-                    $newName = $img->getRandomName();
-                    $img->move(FCPATH . 'uploads/products/', $newName);
+                // Pastikan file valid
+                if ($img->isValid()) {
+                    $newName = compress_to_webp($img, FCPATH . 'uploads/products/');
                     
-                    // Simpan ke tabel product_images
-                    $this->productImageModel->save([
-                        'product_id' => $productId,
-                        'image'      => $newName
-                    ]);
+                    if ($newName) {
+                        // Simpan ke tabel product_images
+                        $this->productImageModel->save([
+                            'product_id' => $productId,
+                            'image'      => $newName
+                        ]);
+                    }
                 }
             }
         }
@@ -90,23 +93,33 @@ class Product extends BaseController
     // 4. Proses Hapus Produk & Hapus File Gambar Fisik
     public function delete($id = null)
     {
-        // Cari gambar-gambar milik produk ini
+        $product = $this->productModel->find($id);
+        if (!$product) {
+            return redirect()->to(base_url('admin/products'))->with('error', 'Produk tidak ditemukan');
+        }
+
+        $basePath = rtrim(FCPATH, DIRECTORY_SEPARATOR . '/') . '/uploads/products/';
+
+        // 1. Hapus main_image dari server
+        if ($product['main_image'] != 'default.jpg' && file_exists($basePath . $product['main_image'])) {
+            unlink($basePath . $product['main_image']);
+        }
+
+        // 2. Cari gambar-gambar gallery milik produk ini
         $images = $this->productImageModel->where('product_id', $id)->findAll();
         
-        // Hapus file fisik dari server
+        // 3. Hapus file fisik gallery dari server
         foreach ($images as $img) {
-            $filePath = FCPATH . 'uploads/products/' . $img['image'];
-            if (file_exists($filePath)) {
-                unlink($filePath);
+            if (file_exists($basePath . $img['image'])) {
+                unlink($basePath . $img['image']);
             }
         }
 
-        // Hapus data dari database (otomatis terhapus di product_images jika pakai relasi, 
-        // tapi untuk amannya kita hapus manual lewat model CI4)
+        // 4. Hapus data dari database
         $this->productImageModel->where('product_id', $id)->delete();
         $this->productModel->delete($id);
 
-        return redirect()->to(base_url('admin/products'))->with('success', 'Produk beserta gambarnya berhasil dihapus!');
+        return redirect()->to(base_url('admin/products'))->with('success', 'Produk beserta semua gambarnya berhasil dihapus!');
     }
 
     // 5. Menampilkan Form Edit Produk
@@ -136,14 +149,16 @@ class Product extends BaseController
     $file = $this->request->getFile('main_image');
     $fileName = $product['main_image']; // Gunakan foto lama sebagai default
 
-    if ($file && $file->isValid() && !$file->hasMoved()) {
-        // Hapus foto lama jika bukan default.jpg
-        if ($fileName != 'default.jpg' && file_exists(FCPATH . 'uploads/products/' . $fileName)) {
-            unlink(FCPATH . 'uploads/products/' . $fileName);
+    if ($file && $file->isValid()) {
+        $basePath = rtrim(FCPATH, DIRECTORY_SEPARATOR . '/') . '/uploads/products/';
+        $newName = compress_to_webp($file, $basePath);
+        if ($newName) {
+            // Hapus foto lama jika bukan default.jpg
+            if ($fileName != 'default.jpg' && file_exists($basePath . $fileName)) {
+                unlink($basePath . $fileName);
+            }
+            $fileName = $newName;
         }
-        
-        $fileName = $file->getRandomName();
-        $file->move(FCPATH . 'uploads/products/', $fileName);
     }
 
     $this->productModel->update($id, [
@@ -159,14 +174,15 @@ class Product extends BaseController
     if ($imagefiles = $this->request->getFiles()) {
         if (isset($imagefiles['product_images'])) {
             foreach ($imagefiles['product_images'] as $img) {
-                if ($img->isValid() && ! $img->hasMoved()) {
-                    $newName = $img->getRandomName();
-                    $img->move(FCPATH . 'uploads/products/', $newName);
+                if ($img->isValid()) {
+                    $newName = compress_to_webp($img, FCPATH . 'uploads/products/');
                     
-                    $this->productImageModel->save([
-                        'product_id' => $id, // Gunakan $id yang sedang diedit
-                        'image'      => $newName
-                    ]);
+                    if ($newName) {
+                        $this->productImageModel->save([
+                            'product_id' => $id, // Gunakan $id yang sedang diedit
+                            'image'      => $newName
+                        ]);
+                    }
                 }
             }
         }
@@ -182,12 +198,12 @@ class Product extends BaseController
     $image = $this->productImageModel->find($id);
 
     if ($image) {
-        // Simpan ID produknya dulu sebelum datanya dihapus untuk keperluan redirect balik
         $productId = $image['product_id'];
+        $basePath = rtrim(FCPATH, DIRECTORY_SEPARATOR . '/') . '/uploads/products/';
 
         // 2. Hapus file fisik di folder uploads/products/
-        if (file_exists(FCPATH . 'uploads/products/' . $image['image'])) {
-            unlink(FCPATH . 'uploads/products/' . $image['image']);
+        if (file_exists($basePath . $image['image'])) {
+            unlink($basePath . $image['image']);
         }
 
         // 3. Hapus data dari database
