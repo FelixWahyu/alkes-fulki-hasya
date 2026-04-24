@@ -42,6 +42,11 @@
                 <form action="<?= base_url('admin/settings/update-text') ?>" method="POST">
                     <?= csrf_field() ?>
                     <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">Nama Bisnis</label>
+                        <input type="text" name="business_name" class="form-control form-control-lg border-light bg-light focus-ring" value="<?= esc($settings['business_name'] ?? '') ?>" placeholder="Misal: Fulki Hasya">
+                    </div>
+
+                    <div class="mb-4">
                         <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">Judul Utama (Hero Title)</label>
                         <input type="text" name="hero_title" class="form-control form-control-lg border-light bg-light focus-ring" value="<?= esc($settings['hero_title'] ?? '') ?>" placeholder="Misal: Solusi Alat Kesehatan Terpercaya">
                     </div>
@@ -56,8 +61,24 @@
                     </div>
                     
                     <div class="mb-4">
-                        <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">Tentang Toko (Halaman Home)</label>
+                        <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">Tentang Toko (Halaman Home & Profil)</label>
                         <textarea name="about_text" class="form-control border-light bg-light focus-ring" rows="6" placeholder="Tuliskan deskripsi singkat toko Anda di sini..."><?= esc($settings['about_text'] ?? '') ?></textarea>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">Email Website</label>
+                            <input type="email" name="web_email" class="form-control border-light bg-light focus-ring" value="<?= esc($settings['web_email'] ?? '') ?>" placeholder="info@tokoanda.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">Link YouTube (Embed/Full URL)</label>
+                            <input type="text" name="youtube_link" class="form-control border-light bg-light focus-ring" value="<?= esc($settings['youtube_link'] ?? '') ?>" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">Alamat Lengkap</label>
+                        <textarea name="web_address" class="form-control border-light bg-light focus-ring" rows="3" placeholder="Alamat lengkap toko Anda..."><?= esc($settings['web_address'] ?? '') ?></textarea>
                     </div>
                     
                     <div class="text-end">
@@ -111,6 +132,30 @@
                         </button>
                     </div>
                 </form>
+
+                <!-- Logo Website Upload -->
+                <form action="<?= base_url('admin/settings/update-logo') ?>" method="POST" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
+                    <div class="mb-4 pt-4 border-top">
+                        <label class="form-label small fw-bold text-muted text-uppercase d-block mb-3" style="letter-spacing: 0.05em;">Logo Website</label>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="bg-light p-2 rounded border" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <?php if(!empty($settings['web_logo'])): ?>
+                                    <img src="<?= base_url('uploads/media/' . $settings['web_logo']) ?>" class="img-fluid" style="max-height: 100%;">
+                                <?php else: ?>
+                                    <i class="fas fa-image text-muted opacity-25 fa-2x"></i>
+                                <?php endif; ?>
+                            </div>
+                            <div class="flex-grow-1">
+                                <input type="file" name="web_logo" class="form-control form-control-sm border-light bg-light" id="webLogoInput" accept="image/*" required>
+                                <small class="text-muted d-block mt-1">PNG, JPG, SVG (Maks. 2MB)</small>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold">
+                            <i class="fas fa-upload me-2"></i> Update Logo
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -130,6 +175,16 @@ document.getElementById('heroVideoInput').addEventListener('change', function() 
         } else {
             fileNameDisplay.textContent = file.name;
         }
+    }
+});
+
+document.getElementById('webLogoInput').addEventListener('change', function() {
+    const file = this.files[0];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+
+    if (file && file.size > maxSize) {
+        alert("File terlalu besar! Maksimal 2MB.");
+        this.value = ""; // Reset
     }
 });
 </script>

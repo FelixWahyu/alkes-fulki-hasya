@@ -52,7 +52,7 @@
                             </td>
                         </tr>
                     <?php else: ?>
-                        <?php $no = 1; foreach($products as $row): ?>
+                        <?php $no = 1 + (12 * ($pager->getCurrentPage('product') - 1)); foreach($products as $row): ?>
                         <tr>
                             <td class="text-center ps-4 fw-medium text-muted"><?= $no++ ?></td>
                             <td>
@@ -120,6 +120,18 @@
             </table>
         </div>
     </div>
+    <?php if ($pager->getPageCount() > 1): ?>
+        <div class="card-footer bg-white py-3">
+            <div class="row align-items-center">
+                <div class="col-sm-6 text-muted small mb-2 mb-sm-0">
+                    Menampilkan <?= count($products) ?> produk di halaman ini
+                </div>
+                <div class="col-sm-6">
+                    <?= $pager->links('product', 'admin_pagination') ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 
 <script>

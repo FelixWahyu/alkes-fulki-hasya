@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Admin Panel - Fulki Hasya' ?></title>
+
+    <!-- Favicon -->
+    <?php
+        $db = \Config\Database::connect();
+        $logoSetting = $db->table('settings')->where('key', 'web_logo')->get()->getRowArray();
+        $favIcon = (!empty($logoSetting) && !empty($logoSetting['value'])) 
+                   ? base_url('uploads/media/' . $logoSetting['value']) 
+                   : base_url('favicon.ico');
+    ?>
+    <link rel="icon" type="image/x-icon" href="<?= $favIcon ?>">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,5 +97,6 @@
             });
         });
     </script>
+    <?= $this->renderSection('extra-js') ?>
 </body>
 </html>

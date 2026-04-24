@@ -1,69 +1,87 @@
-# CodeIgniter 4 Application Starter
+# Fulki Hasya - Solusi Alat Kesehatan Terpercaya
 
-## What is CodeIgniter?
+Fulki Hasya adalah platform web profesional untuk katalog dan manajemen alat kesehatan. Website ini dirancang untuk memberikan pengalaman browsing produk medis yang elegan, cepat, dan responsif, sekaligus menyediakan sistem administrasi yang lengkap untuk pengelolaan data bisnis.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 🚀 Fitur Utama
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+### Frontend (User Interface)
+- **Katalog Produk Dinamis**: Pencarian dan filter produk berdasarkan kategori tanpa reload (AJAX).
+- **Pagination Canggih**: Navigasi halaman produk yang cepat dengan sistem asinkron.
+- **Detail Produk Lengkap**: Galeri foto produk, spesifikasi teknis, dan fitur produk terkait.
+- **Responsive Design**: Tampilan yang optimal di berbagai perangkat (Mobile, Tablet, Desktop).
+- **Optimasi SEO**: Penggunaan metadata dinamis, struktur heading yang tepat, dan skema JSON-LD.
+- **Integrasi WhatsApp**: Tombol konsultasi langsung ke admin via WhatsApp.
+- **Formulir Kemitraan**: Memungkinkan calon mitra untuk mengirimkan tawaran kerja sama secara langsung.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+### Backend (Admin Dashboard)
+- **Dashboard Statistik**: Ringkasan data produk dan pesan masuk.
+- **Manajemen Produk**: CRUD produk lengkap dengan upload foto galeri.
+- **Otomasi Gambar**: Kompresi otomatis gambar ke format WebP untuk performa website yang lebih cepat.
+- **Manajemen Kategori**: Pengaturan kategori produk yang fleksibel.
+- **Pengaturan Web Dinamis**: Ubah Logo, Nama Bisnis, Kontak, Link Sosial Media, hingga Video Hero langsung dari panel admin.
+- **Manajemen Leads**: Kelola data pesan dari formulir kontak dan penawaran kemitraan.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## 🛠️ Teknologi & Library
 
-## Installation & updates
+### Core
+- **Framework**: CodeIgniter 4.7.2 (PHP 8.2+)
+- **Database**: MySQL / MariaDB
+- **Frontend Framework**: Bootstrap 5
+- **Template Engine**: CI4 View Cells & Layouts
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### Library & Plugins
+- **ScrollReveal**: Untuk animasi elemen saat di-scroll.
+- **FontAwesome 6**: Library ikon vektor premium.
+- **SweetAlert2**: Notifikasi dan konfirmasi aksi yang interaktif.
+- **Google Fonts (Outfit)**: Tipografi modern dan profesional.
+- **GD Library**: Digunakan untuk pemrosesan dan kompresi gambar.
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+## ⚙️ Cara Instalasi
 
-## Setup
+Ikuti langkah-langkah berikut untuk menjalankan project ini di lingkungan lokal Anda:
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/FelixWahyu/alkes-fulki-hasya.git
+   cd alkes-fulki-hasya
+   ```
 
-## Important Change with index.php
+2. **Install Dependensi**
+   Pastikan Anda sudah menginstal [Composer](https://getcomposer.org/).
+   ```bash
+   composer install
+   ```
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+3. **Konfigurasi Environment**
+   Salin file `env` menjadi `.env` dan sesuaikan konfigurasinya.
+   ```bash
+   cp env .env
+   ```
+   Buka file `.env` dan atur database serta base URL:
+   ```env
+   database.default.hostname = localhost
+   database.default.database = nama_database_anda
+   database.default.username = root
+   database.default.password = 
+   database.default.DBDriver = MySQLi
+   
+   app.baseURL = 'http://localhost:8080/'
+   ```
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+4. **Persiapan Database**
+   Import file database (jika ada di folder database/sql) atau jalankan migrasi jika tersedia.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+5. **Jalankan Server Lokal**
+   ```bash
+   php spark serve
+   ```
+   Akses website melalui browser di: `http://localhost:8080`
 
-## Repository Management
+## 📁 Struktur Direktori
+- `app/Controllers`: Logika aplikasi (Frontend & Admin).
+- `app/Models`: Pengelolaan data database.
+- `app/Views`: Template tampilan website.
+- `public/uploads`: Folder penyimpanan gambar produk dan media web.
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.2 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+---
+Dikembangkan dengan ❤️ untuk **Fulki Hasya**.

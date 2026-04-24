@@ -116,7 +116,7 @@
                                 $item = (array) $p;
                                 $p_img = $item['main_image'] ?? 'default.jpg';
                                 ?>
-                                <div class="col-sm-6 col-xl-4 reveal">
+                                <div class="col-sm-6 col-lg-4 col-xl-3 reveal">
                                     <article class="product-card">
                                         <a href="<?= base_url('produk/' . ($item['slug'] ?? '')) ?>" class="product-img-link">
                                             <div class="product-img-wrap">
@@ -149,6 +149,13 @@
                                 </div>
                             <?php endforeach; ?>
                         </div>
+
+                        <!-- Pagination -->
+                        <?php if ($pager->getPageCount() > 1): ?>
+                            <div class="mt-5 d-flex justify-content-center reveal">
+                                <?= $pager->links('product', 'frontend_pagination') ?>
+                            </div>
+                        <?php endif; ?>
                     <?php else: ?>
                         <div class="empty-state reveal">
                             <div class="empty-icon">
@@ -503,9 +510,17 @@
         let currentCategory = '<?= $current_cat ?? '' ?>';
         let debounceTimer;
 
-        function updateProducts() {
+        function updateProducts(customUrl = null) {
             const query = searchInput.value;
-            const url = new URL(window.location.href);
+            let url;
+            
+            if (customUrl) {
+                url = new URL(customUrl);
+            } else {
+                url = new URL(window.location.href);
+                // Reset to page 1 when filter changes
+                url.searchParams.delete('page_product');
+            }
 
             if (query) url.searchParams.set('q', query);
             else url.searchParams.delete('q');
@@ -531,8 +546,6 @@
                     const newContentElement = doc.getElementById('product-container');
 
                     if (newContentElement) {
-                        // Hilangkan class 'reveal' pada konten baru agar langsung tampil tanpa menunggu animasi ScrollReveal
-                        // Karena ScrollReveal sering bermasalah saat konten diupdate via AJAX
                         const revealElements = newContentElement.querySelectorAll('.reveal');
                         revealElements.forEach(el => {
                             el.classList.remove('reveal');
@@ -541,11 +554,18 @@
                         });
 
                         productContainer.innerHTML = newContentElement.innerHTML;
+                        
+                        // Scroll to top of catalog smoothly
+                        const catalogSection = document.querySelector('.page-hero');
+                        if (catalogSection && customUrl) {
+                             window.scrollTo({
+                                top: catalogSection.offsetHeight - 50,
+                                behavior: 'smooth'
+                            });
+                        }
                     }
 
                     productContainer.style.opacity = '1';
-
-                    // Re-bind clear filter buttons
                     bindClearFilters();
                 })
                 .catch(error => {
@@ -553,6 +573,16 @@
                     productContainer.style.opacity = '1';
                 });
         }
+
+        // Handle pagination clicks via AJAX
+        productContainer.addEventListener('click', function(e) {
+            const pagerLink = e.target.closest('.page-link-fh');
+            if (pagerLink) {
+                e.preventDefault();
+                const url = pagerLink.getAttribute('href');
+                updateProducts(url);
+            }
+        });
 
         function bindClearFilters() {
             document.querySelectorAll('.clear-filter').forEach(btn => {
@@ -596,7 +626,7 @@
         // Search Input Event (Debounced)
         searchInput.addEventListener('input', function () {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(updateProducts, 400);
+            debounceTimer = setTimeout(() => updateProducts(), 400);
         });
 
         // Category Click Event

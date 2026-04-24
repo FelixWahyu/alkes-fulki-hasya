@@ -33,7 +33,17 @@
             <div class="col-lg-6 reveal">
                 <div class="about-img-grid">
                     <div class="about-video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/fgt4eCiGAms?rel=0&showinfo=0&modestbranding=1"
+                        <?php 
+                            $yt_url = $settings['youtube_link'] ?? '';
+                            $embed_id = 'fgt4eCiGAms'; // default
+                            
+                            if (!empty($yt_url)) {
+                                if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $yt_url, $match)) {
+                                    $embed_id = $match[1];
+                                }
+                            }
+                        ?>
+                        <iframe src="https://www.youtube.com/embed/<?= $embed_id ?>?rel=0&showinfo=0&modestbranding=1"
                             title="Profile Fulki Hasya"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
@@ -48,13 +58,7 @@
                 <div class="divider-fh"></div>
 
                 <p style="color:var(--fh-text-muted); font-size:1rem; line-height:1.85; margin-bottom:1.25rem;">
-                    Toko Alat Kesehatan <strong>Fulki Hasya</strong> didirikan dengan komitmen untuk menjadi mitra
-                    terdepan dalam penyediaan peralatan medis berkualitas di Indonesia. Kami melayani kebutuhan rumah
-                    sakit, klinik, instansi kesehatan, hingga pemakaian pribadi di rumah.
-                </p>
-                <p style="color:var(--fh-text-muted); font-size:1rem; line-height:1.85;">
-                    Sejak berdiri, kami terus berinovasi dalam menyediakan teknologi kesehatan terbaru dengan harga yang
-                    tetap kompetitif tanpa mengesampingkan standar keamanan medis internasional.
+                    <?= nl2br(esc($settings['about_text'] ?? 'Toko Alat Kesehatan Fulki Hasya didirikan dengan komitmen untuk menjadi mitra terdepan dalam penyediaan peralatan medis berkualitas di Indonesia.')) ?>
                 </p>
 
                 <!-- Stats row -->

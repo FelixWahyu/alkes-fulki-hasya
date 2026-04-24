@@ -152,7 +152,7 @@
                     $item  = (array) $p;
                     $p_img = $item['main_image'] ?? 'default.jpg';
                 ?>
-                <div class="col-md-6 col-lg-4 reveal reveal-delay-<?= min($i + 1, 3) ?>">
+                <div class="col-md-6 col-lg-3 reveal reveal-delay-<?= min($i + 1, 4) ?>">
                     <article class="product-card card-fh">
                         <a href="<?= base_url('produk/' . ($item['slug'] ?? '')) ?>" class="product-img-link">
                             <div class="product-img-wrap">
