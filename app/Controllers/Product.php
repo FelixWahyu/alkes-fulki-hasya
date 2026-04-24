@@ -33,14 +33,15 @@ class Product extends BaseController
     if ($categorySlug) {
         $category = $this->categoryModel->where('slug', $categorySlug)->first();
         if ($category) {
-            $data['products'] = $this->productModel->getProductsWithCategory($category['id'], $keyword);
+            $data['products'] = $this->productModel->getProductsWithCategory($category['id'], $keyword)->paginate(12, 'product');
         } else {
             $data['products'] = [];
         }
     } else {
-        $data['products'] = $this->productModel->getProductsWithCategory(null, $keyword);
+        $data['products'] = $this->productModel->getProductsWithCategory(null, $keyword)->paginate(12, 'product');
     }
 
+    $data['pager']       = $this->productModel->pager;
     $data['title']       = 'Katalog Alat Kesehatan - Fulki Hasya';
     $data['settings']    = $this->getSettings();
     $data['current_cat'] = $categorySlug;

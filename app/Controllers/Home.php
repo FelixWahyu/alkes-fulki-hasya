@@ -22,8 +22,8 @@ class Home extends BaseController
         $data = [
             'title'    => ($settings['business_name'] ?? 'Fulki Hasya') . ' - Solusi Alat Kesehatan Terpercaya',
             'settings' => $settings,
-            // Ambil 6 produk terbaru untuk ditampilkan di Home
-            'featured_products' => $productModel->getProductsWithCategory()
+            // Ambil maksimal 8 produk terbaru untuk ditampilkan di Home
+            'featured_products' => $productModel->getProductsWithCategory()->findAll(8)
         ];
 
         return view('frontend/home/index', $data);

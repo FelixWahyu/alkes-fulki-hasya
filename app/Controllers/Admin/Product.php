@@ -25,7 +25,8 @@ class Product extends BaseController
     {
         $data = [
             'title'    => 'Kelola Produk',
-            'products' => $this->productModel->getProductsWithCategory() // Fungsi dari ProductModel sebelumnya
+            'products' => $this->productModel->getProductsWithCategory()->paginate(12, 'product'),
+            'pager'    => $this->productModel->pager
         ];
         return view('admin/product/index', $data);
     }
